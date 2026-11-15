@@ -1,0 +1,22 @@
+scan  0: 358 points, 358 at or above the threshold,  1471 clocks, sums identical
+scan  1: 327 points, 327 at or above the threshold,  1347 clocks, sums identical
+scan  2: 321 points, 321 at or above the threshold,  1323 clocks, sums identical
+scan  3: 196 points, 196 at or above the threshold,   823 clocks, sums identical
+scan  4: 264 points, 264 at or above the threshold,  1095 clocks, sums identical
+scan  5: 258 points, 258 at or above the threshold,  1071 clocks, sums identical
+scan  6: 360 points, 360 at or above the threshold,  1479 clocks, sums identical
+scan  7: 216 points, 216 at or above the threshold,   903 clocks, sums identical
+scan  8: 160 points, 160 at or above the threshold,   679 clocks, sums identical
+scan  9: 326 points, 326 at or above the threshold,  1343 clocks, sums identical
+scan 10: 277 points, 277 at or above the threshold,  1147 clocks, sums identical
+scan 11: 195 points, 195 at or above the threshold,   819 clocks, sums identical
+scan 12: 355 points, 355 at or above the threshold,  1459 clocks, sums identical
+scan 13: 184 points, 184 at or above the threshold,   775 clocks, sums identical
+scan 14: 297 points, 297 at or above the threshold,  1227 clocks, sums identical
+scan 15: 288 points, 288 at or above the threshold,  1191 clocks, sums identical
+scan 16: 341 points, 341 at or above the threshold,  1403 clocks, sums identical
+scan 17: 234 points, 234 at or above the threshold,   975 clocks, sums identical
+scan 18: 191 points, 191 at or above the threshold,   803 clocks, sums identical
+scan 19: 174 points, 174 at or above the threshold,   735 clocks, sums identical
+threshold 0: 20 of 20 scans identical to the model in all nine sums (5322 points, 5322 at or above the threshold)
+largest CORDIC sine or cosine difference from the exact value: 2.34 LSB of 2^-14

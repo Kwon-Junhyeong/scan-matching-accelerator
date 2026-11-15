@@ -1,0 +1,9 @@
+30 poses, 360 beams each; returns per scan: test map 258, ridge map 255 on average
+test map, double precision, 8 passes:
+  started at the true pose, distance after 8 passes (cells): median 0.303, 95th percentile 0.764, largest 1.008
+  from 90 starts, distance from the true pose (cells): median 0.364, 95th percentile 0.733, largest 1.042
+  from 90 starts, heading error (deg): median 0.171, 95th percentile 0.792, largest 2.101
+ridge map, double precision, 8 passes:
+  started at the true pose, distance after 8 passes (cells): median 0.033, 95th percentile 0.062, largest 0.065
+  from 90 starts, distance from the true pose (cells): median 0.038, 95th percentile 0.064, largest 0.159
+  from 90 starts, heading error (deg): median 0.059, 95th percentile 0.148, largest 0.153

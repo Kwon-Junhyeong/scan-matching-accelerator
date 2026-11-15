@@ -1,0 +1,25 @@
+quadrant: 0 of 360 stage-1 coordinates off by more than 0.01 cells, largest difference 0.0053 cells
+phase: 360 beams, largest difference from heading + angle x 8192/180 0.4889 phase units (0.01074 deg)
+TEST quadrant PASS
+stream pass 0, one point at a time:
+  accepted 360, looked up 360, start to interrupt 21961 clocks
+  sums equal to pass 0
+  H11 167718741236026 H22 167718741236026 H33 323451280663 K1 379730189 K2 377265511 K3 -37701500403
+stream pass 1, TVALID held high:
+  accepted 360, looked up 360, start to interrupt 1479 clocks
+  sums equal to pass 0
+  H11 167718741236026 H22 167718741236026 H33 323451280663 K1 379730189 K2 377265511 K3 -37701500403
+stream pass 2, random gaps:
+  accepted 360, looked up 360, start to interrupt 1482 clocks
+  sums equal to pass 0
+  H11 167718741236026 H22 167718741236026 H33 323451280663 K1 379730189 K2 377265511 K3 -37701500403
+TEST stream PASS
+abort: start cleared after 100 points; pass state 0, sums all zero
+  next pass: accepted 360, looked up 360, start to interrupt 1479 clocks, sums equal to stream pass 0
+TEST abort PASS
+tlast: accepted 100, looked up 100, point count register 100, start to interrupt 439 clocks
+TEST tlast PASS
+outside: 360 points, 180 outside the map: looked up 360, map reads 720; the 180 inside points alone: looked up 180, map reads 720; sums equal
+TEST outside PASS
+threshold 256: looked up 360, sums all zero
+TEST threshold PASS

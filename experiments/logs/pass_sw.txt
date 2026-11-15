@@ -1,0 +1,9 @@
+Intel Core i5-1335U, MSVC 19.40 /O2, Windows 11
+map 180 x 180, sensor (90.5, 90.5), 358 of 360 beams return
+points  double us/pass  fixed us/pass
+    60            4.41          10.54
+   120           10.26          22.28
+   180           15.41          36.75
+   240           22.32          43.47
+   300           27.50          69.10
+   360           33.58          70.63
