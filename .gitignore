@@ -1,0 +1,7 @@
+build/
+__pycache__/
+*.jou
+*.log
+!sim/logs/*.log
+xsim.dir/
+.Xil/
