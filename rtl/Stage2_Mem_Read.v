@@ -1,8 +1,6 @@
 `timescale 1ns / 1ps
 
-// Stage 2: reads the four map cells around a point through one block RAM port, one read per clock,
-// so a new point can start every 4 clocks. The data of a read is taken READ_LATENCY + 1 clocks after
-// its address is registered. A point outside the map reads nothing and gets four zero cells.
+// Stage 2: the four map cells around a point, one block RAM read per clock.
 module Stage2_Mem_Read #(
     parameter integer READ_LATENCY = 1
 )(

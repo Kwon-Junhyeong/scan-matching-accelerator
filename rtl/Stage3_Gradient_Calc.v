@@ -1,8 +1,6 @@
 `timescale 1ns / 1ps
 
-// Stage 3: bilinear map value M and its slope at the point, residual f = 255 - M,
-// and the gate M >= tau.
-// Fractions in: 14 bits. Slope out: 14 fraction bits. M, f and tau: 16 fraction bits.
+// Stage 3: bilinear map value M, its slope, and the residual f = 255 - M.
 module Stage3_Gradient_Calc #(
     parameter integer Q14_ONE = 16384
 )(
@@ -53,7 +51,7 @@ module Stage3_Gradient_Calc #(
     wire signed [39:0] t3 = $signed({1'b0, r1_p11}) * r1_fx  * r1_fy;
     wire signed [39:0] m_val_q28 = t0 + t1 + t2 + t3;
 
-    // 28 -> 16 fraction bits; 24 bits would overflow the 32-bit word at M = 255
+    // 28 -> 16 fraction bits
     wire signed [31:0] m_val_q16 = m_val_q28 >>> 12;
 
     wire signed [15:0] d00_10 = $signed({1'b0, r1_p10}) - $signed({1'b0, r1_p00});

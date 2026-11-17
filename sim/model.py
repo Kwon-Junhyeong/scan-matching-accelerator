@@ -1,14 +1,4 @@
-"""Models of one Gauss-Newton pass, and a runner for the RTL bench.
-
-fixed_pass():  the arithmetic of rtl/ step by step, integer for integer. It takes the sine and
-               cosine that the CORDIC core produced in simulation, so it checks everything after
-               the core.
-double_pass(): the same equations in double precision, with exact sine and cosine.
-run_rtl():     writes the inputs, runs sim/tb_pass.v through sim/run.sh, reads pass.txt.
-
-Units: x, y in map cells (14 fraction bits in the registers), heading in CORDIC phase units
-(8192 = pi), beam angle in degrees (0..359), distance in half cells, map cells 0..255.
-"""
+"""Integer model of one pass (fixed_pass), and a runner for the RTL bench (run_rtl)."""
 import os
 import subprocess
 import numpy as np
@@ -84,43 +74,6 @@ def fixed_pass(points, sincos, px, py, heading, tau, grid):
             K[i] = wrap(K[i] + ((J[i] * f) >> 10), 64)
         n_valid += 1
     return H + K, n_valid
-
-
-def sums_to_float(sums):
-    h11, h12, h13, h22, h23, h33, k1, k2, k3 = sums
-    H = np.array([[h11, h12, h13], [h12, h22, h23], [h13, h23, h33 * 2.0 ** 8]], float) / 2.0 ** 28
-    g = np.array([k1, k2, k3], float) / 2.0 ** 20
-    return H, g
-
-
-def double_pass(points, x, y, heading, grid, tau=0.0):
-    """x, y in cells, heading in phase units. J3 is per radian."""
-    mh, mw = grid.shape
-    H = np.zeros((3, 3))
-    g = np.zeros(3)
-    n = 0
-    for a, d in points:
-        phi = beam_rad(heading, a)
-        c, s = np.cos(phi), np.sin(phi)
-        px, py = d * c / 2 + x, d * s / 2 + y
-        ix, iy = int(np.floor(px)), int(np.floor(py))
-        if not (0 <= ix < mw - 1 and 0 <= iy < mh - 1):
-            p00 = p10 = p01 = p11 = 0.0
-            fx = fy = 0.0
-        else:
-            fx, fy = px - ix, py - iy
-            p00, p10 = grid[iy, ix], grid[iy, ix + 1]
-            p01, p11 = grid[iy + 1, ix], grid[iy + 1, ix + 1]
-        M = p00 * (1 - fx) * (1 - fy) + p10 * fx * (1 - fy) + p01 * (1 - fx) * fy + p11 * fx * fy
-        if M < tau:
-            continue
-        gx = (p10 - p00) * (1 - fy) + (p11 - p01) * fy
-        gy = (p01 - p00) * (1 - fx) + (p11 - p10) * fx
-        J = np.array([gx, gy, gx * (-d * s / 2) + gy * (d * c / 2)])
-        H += np.outer(J, J)
-        g += J * (255.0 - M)
-        n += 1
-    return H, g, n
 
 
 def run_rtl(points, px, py, heading, tau, grid, build):

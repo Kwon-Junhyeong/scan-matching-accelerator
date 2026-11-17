@@ -1,8 +1,6 @@
 `timescale 1ns / 1ps
 
-// Stage 1: scan point (distance, angle) to map coordinates, and the derivative of the
-// point position with respect to the heading.
-// Coordinates leave in map cells with 14 fraction bits. One distance unit is half a cell.
+// Stage 1: scan point to map coordinates (14 fraction bits) and their heading derivatives.
 module Stage1_Coord_Calc (
     input  wire        clk,
     input  wire        rst_n,
@@ -29,10 +27,7 @@ module Stage1_Coord_Calc (
     wire [31:0] s_py   = py_pipe[PIPE_DEPTH-1];
     wire [15:0] s_dist = dist_pipe[PIPE_DEPTH-1];
 
-    // CORDIC phase: 16 bit scaled radians, 8192 = pi, valid from -8192 to 8192.
-    // Beam angle in degrees to phase units: x 8192/180, as x 2982616 / 2^16 with rounding
-    // (2982616 = round(8192/180 x 2^16)); within 0.49 phase units of the exact value for 0..359.
-    // Heading plus beam is taken modulo one turn (16384) and sign-extended from 14 bits.
+    // degrees to CORDIC phase (8192 = pi), heading added, wrapped to one turn
     localparam [21:0] DEG_TO_PHASE = 22'd2982616;
     wire [37:0] beam_q16    = lidar_angle * DEG_TO_PHASE + 38'd32768;
     wire [13:0] beam_phase  = beam_q16[29:16];
@@ -74,7 +69,6 @@ module Stage1_Coord_Calc (
         end
     end
 
-    // All operands signed, so the sine and cosine keep their sign before the pose is added.
     wire signed [16:0] dist_s = $signed({1'b0, s_dist});
     wire signed [15:0] cos_s  = $signed(cordic_dout[15:0]);
     wire signed [15:0] sin_s  = $signed(cordic_dout[31:16]);

@@ -1,7 +1,6 @@
 `timescale 1ns / 1ps
 
-// Stage 4: Jacobian row J = [dM/dx, dM/dy, dM/dx * dx/dtheta + dM/dy * dy/dtheta],
-// 14 fraction bits.
+// Stage 4: Jacobian row J = [dM/dx, dM/dy, dM/dtheta].
 module Stage4_Jacobian_Calc (
     input  wire clk,
     input  wire rst_n,

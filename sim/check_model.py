@@ -1,8 +1,6 @@
-"""Bit-exact check: the sums of the RTL against fixed_pass() on scans of the test map.
+"""RTL sums against the integer model on ray-cast scans of the test map.
 
-Each scan: 360 beams 1 degree apart, ray-cast from a random free cell of sim/data/map.pgm
-to the nearest wall, with a random heading.
-Usage: python sim/check_model.py [number of scans] [threshold on M, map value]   (BUILD as for run.sh, default build/)
+usage: python sim/check_model.py [scans] [threshold]
 """
 import os
 import sys

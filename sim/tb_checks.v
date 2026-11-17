@@ -1,22 +1,7 @@
 `timescale 1ns / 1ps
 
-// Self-checking bench for the accelerator, driven through its AXI4-Lite and AXI4-Stream ports.
-//
-// Map: 64 x 64 cells in block RAM, a ring wall of radius 20 cells around (32, 32).
-// Scan: the sensor at (32, 32) with heading -7400 phase units; 360 beams at 0 to 359 degrees,
-// so heading plus beam covers all four quadrants and wraps around the CORDIC phase range.
-//
-// quadrant: one point at a time. Every coordinate that leaves stage 1 must match
-//           (32 + d/2 cos phi, 32 + d/2 sin phi) to within CORDIC precision, and the phase
-//           handed to the core must be within half a phase unit of heading + angle x 8192/180.
-// stream:   one 360-point scan sent three times: one point at a time, with TVALID held high,
-//           and with random gaps. Every pass must take in and look up all 360 points, and the
-//           sums read back over AXI4-Lite must be identical in the three passes.
-// abort:     start cleared after 100 points; the pass must return to idle with zero sums, and the
-//            next full pass must give the sums of stream pass 0.
-// tlast:     a 100-point scan with TLAST on the last point ends the pass after 100 points.
-// outside:   points that land outside the map read no map cells and add nothing to the sums.
-// threshold: with the threshold above every map value, all nine sums stay zero.
+// Self-checking bench: coordinates in all four quadrants, three stream patterns, abort, TLAST,
+// points outside the map, and a threshold above every map value.
 module tb_checks;
     reg aclk = 0; always #5 aclk = ~aclk;    // 100 MHz
     reg aresetn = 0;

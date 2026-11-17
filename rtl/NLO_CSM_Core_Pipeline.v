@@ -1,10 +1,7 @@
 `timescale 1ns / 1ps
 
 // One Gauss-Newton pass: scan points in on a stream, the sums H and g out.
-// Stage 2 takes a new point every 4 clocks. A point that leaves stage 1 while stage 2 is busy
-// waits in a FIFO, and the stream is accepted only while fewer than FIFO_DEPTH points are between
-// the input and stage 2, so the FIFO cannot overflow. Stage 1 takes 24 clocks, so about 7 points
-// are on their way at once; 8 entries keep stage 2 busy.
+// Input is accepted only while the FIFO in front of stage 2 has room.
 module NLO_CSM_Core_Pipeline #(
     parameter integer FIFO_DEPTH   = 8,
     parameter integer READ_LATENCY = 1,     // block RAM read latency in clocks

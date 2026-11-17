@@ -1,9 +1,6 @@
 `timescale 1ns / 1ps
 
-// Stage 5: H += J^T J (6 terms) and g += J^T f (3 terms) in 64-bit accumulators.
-// H11..H23: 28 fraction bits. H33: 20 fraction bits (J3 x J3 >>> 8), so that 360 points at up to
-// 361 cells, the diagonal of a 256 x 256 map, cannot overflow 64 bits. g: 14 + 16 - 10 = 20 fraction bits.
-// Cleared while the pass is idle.
+// Stage 5: H += J^T J and g += J^T f in 64-bit accumulators.
 module Stage5_Matrix_MAC (
     input  wire clk,
     input  wire rst_n,
