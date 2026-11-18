@@ -20,18 +20,6 @@ Each scan point goes through five stages, from the beam to the update sums:
 
 Stage 2 takes a new point every 4 clocks. Points leaving stage 1 wait in an 8-entry FIFO, and the stream is accepted only while there is room, so no point is dropped.
 
-![Pipeline](docs/pipeline.png)
+## Build
 
-## Checked in simulation and on the board
-
-In RTL simulation, the nine sums match an integer model of the arithmetic bit for bit on 20 ray-cast scans (5,322 points). A self-checking testbench covers all four quadrants, three stream patterns, an aborted pass, a short scan, points outside the map and the threshold on the map value. On the ZCU104 the design met timing at 100 MHz.
-
-## Run
-
-Run the checks from the repository root, with Vivado on the PATH and Python 3 with NumPy:
-
-```sh
-export PART=xc7a35tcpg236-1
-sh sim/run.sh tb_checks
-python3 sim/check_model.py 20
-```
+`ip/cordic_sin_cos.tcl` creates the CORDIC core of stage 1 (`vivado -mode batch -source ip/cordic_sin_cos.tcl -tclargs OUT_DIR`). The top module is `rtl/nlo_csm_accel_v1_0.v`. On the ZCU104 the design met timing at 100 MHz.
