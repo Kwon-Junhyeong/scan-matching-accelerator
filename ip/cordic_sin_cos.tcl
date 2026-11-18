@@ -1,4 +1,4 @@
-# Creates the CORDIC core used by stage 1 and generates its simulation and synthesis sources.
+# Creates the CORDIC core used by stage 1 (settings of the board design).
 #   vivado -mode batch -source ip/cordic_sin_cos.tcl -tclargs <output dir> [part]
 # The board design used xczu7ev-ffvc1156-2-e (ZCU104).
 
@@ -26,11 +26,4 @@ set_property -dict [list \
     CONFIG.ACLKEN                      {false} \
     CONFIG.ARESETN                     {true} \
 ] [get_ips cordic_sin_cos]
-generate_target {simulation synthesis} [get_ips cordic_sin_cos]
-
-# library and file of every simulation source, in compile order, for sim/run.sh
-set fh [open [file join $out sim_files.txt] w]
-foreach f [get_files -compile_order sources -used_in simulation -of_objects [get_files cordic_sin_cos.xci]] {
-    puts $fh "[get_property LIBRARY $f] $f"
-}
-close $fh
+generate_target {synthesis} [get_ips cordic_sin_cos]
