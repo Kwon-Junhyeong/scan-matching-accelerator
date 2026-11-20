@@ -1,6 +1,6 @@
 # Scan-Matching Accelerator
 
-FPGA logic for Gauss-Newton LiDAR scan matching on an occupancy grid map, controlled by the ARM cores of a ZCU104 board (Zynq UltraScale+ MPSoC). Built for POLARIS SIF 2026.
+FPGA logic for Gauss-Newton LiDAR scan matching on an occupancy grid map, controlled by the ARM cores of a ZCU104 board (Zynq UltraScale+ MPSoC).
 
 ## Division of labor between the ARM cores and the logic
 
