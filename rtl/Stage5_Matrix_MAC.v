@@ -8,7 +8,7 @@ module Stage5_Matrix_MAC (
 
     // from stage 4
     input wire signed [31:0] j_i1, j_i2, j_i3,  // Q14
-    input wire signed [31:0] f_i,  // Q24
+    input wire signed [31:0] f_i,  // Q16
     input wire                point_valid_in,
     input wire                st4_valid,
 
@@ -37,7 +37,7 @@ module Stage5_Matrix_MAC (
             p_h23 <= $signed(j_i2) * $signed(j_i3);
             p_h33 <= $signed(j_i3) * $signed(j_i3);
 
-            // Gradient (Q14 * Q24 = Q38 -> Q28 normalization)
+            // Gradient (Q14 * Q16 = Q30, shifted to Q20)
             p_k1  <= ($signed(j_i1) * $signed(f_i)) >>> 10;
             p_k2  <= ($signed(j_i2) * $signed(f_i)) >>> 10;
             p_k3  <= ($signed(j_i3) * $signed(f_i)) >>> 10;

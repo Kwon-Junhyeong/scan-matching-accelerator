@@ -8,7 +8,7 @@ module Stage4_Jacobian_Calc (
     // from stage 3
     input wire signed [31:0] grad_x,  // Q14
     input wire signed [31:0] grad_y,  // Q14
-    input wire signed [31:0] score_f,  // Q24
+    input wire signed [31:0] score_f,  // Q16
     input wire               point_valid_in,
     input wire               st3_valid,
 
@@ -62,7 +62,7 @@ module Stage4_Jacobian_Calc (
             // J3 (Q14): Q28 to Q14
             j_i3 <= (r_mult_x >>> SHIFT) + (r_mult_y >>> SHIFT);
 
-            st4_score       <= r_score;  // f_i (Q24)
+            st4_score       <= r_score;  // f_i (Q16)
             point_valid_out <= r_pv;
             st4_valid       <= r_v;
         end
