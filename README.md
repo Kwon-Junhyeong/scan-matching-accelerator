@@ -24,6 +24,8 @@ In RTL simulation a point takes 56 clocks from the stream to the sums (24, 26, 2
 
 The whole pipeline was simulated with a map in block RAM and a 360-point scan on the stream, and the pose was updated from its nine sums. On a test room of 128 x 128 cells, a pose guess 1.8 cells and 2.6 degrees off reaches 0.04 cells and under 0.01 degrees in three passes, the same as the passes computed in double precision.
 
+![Pose error by pass](docs/check.png)
+
 ## Build
 
 `ip/cordic_sin_cos.tcl` creates the CORDIC core of stage 1 (`vivado -mode batch -source ip/cordic_sin_cos.tcl -tclargs OUT_DIR`). The top module is `rtl/nlo_csm_accel_v1_0.v`. On the ZCU104 the design met timing at 100 MHz.
