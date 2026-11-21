@@ -48,7 +48,7 @@ module NLO_CSM_Core_Pipeline (
     localparam integer TOTAL_LATENCY = 80;  // latency of the whole pipeline
 
     // Ready/Pacing
-    reg [3:0] cooldown;
+    reg front_busy;  // a point is in stage 1 or 2; the next one waits for it
     reg st1_valid_reg;
     reg [31:0] st1_data_reg;
     // Internal Wires (Signed)
@@ -73,13 +73,13 @@ module NLO_CSM_Core_Pipeline (
             st1_data_reg  <= s_axis_tdata;
         end
     end
-    assign s_axis_tready = (current_state == STATE_RUN) && st2_ready && st1_ready;
+    assign s_axis_tready = (current_state == STATE_RUN) && st2_ready && st1_ready && !front_busy;
     // Control FSM
     always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
         current_state <= STATE_IDLE;
         point_counter <= 0;
-        cooldown      <= 0;
+        front_busy    <= 0;
         latency_cnt   <= 0;
         done_irq      <= 0;
     end
@@ -93,18 +93,19 @@ module NLO_CSM_Core_Pipeline (
                     done_irq <= 0;
                     point_counter <= 0;
                     latency_cnt <= 0;
+                    front_busy <= 0;
                     if (start) current_state <= STATE_RUN;
                 end
 
                 STATE_RUN: begin
                     if (s_axis_tvalid && s_axis_tready) begin
                         point_counter <= point_counter + 1;
-                        cooldown <= 5;  // 6-clock delay (0 to 5)
+                        front_busy <= 1'b1;  // stage 2 takes one point at a time
                         if ((point_counter == 359) || s_axis_tlast)
                             current_state <= STATE_WAIT;
                     end
-                    else if (cooldown != 0) begin
-                        cooldown <= cooldown - 1;
+                    else if (st2_v) begin
+                        front_busy <= 1'b0;  // the four map reads of that point are done
                     end
                 end
 
