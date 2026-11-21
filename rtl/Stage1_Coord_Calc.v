@@ -30,10 +30,12 @@ module Stage1_Coord_Calc (
     wire [31:0] cordic_dout;
     wire        cordic_valid;
     wire        cordic_ready;
-    // scaling
+    // beam angle in degrees to 65536 per turn; the heading uses the same unit, and the sum wraps at one turn
     wire signed [31:0] scaled_lidar_val = $signed({1'b0, lidar_angle}) * 16'd182;
     wire signed [15:0] scaled_lidar_angle = scaled_lidar_val[15:0];
-    wire [15:0] total_angle = pose_theta[15:0] + scaled_lidar_angle;
+    wire [15:0] turn_angle = pose_theta[15:0] + scaled_lidar_angle;
+    // CORDIC phase: 8192 is pi, so one turn is 16384
+    wire [15:0] total_angle = {{2{turn_angle[15]}}, turn_angle[15:2]};
 
     assign ready_out = cordic_ready;  // accept input only when the IP is ready
 
@@ -70,16 +72,10 @@ module Stage1_Coord_Calc (
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             global_x <= 0; global_y <= 0;
-            deriv_theta_x <= 0; deriv_theta_y <= 0;
         end else if (cordic_valid) begin
-            // 1. global_x, y (Q14)
-            global_x <= (($signed({1'b0, s_dist}) * $signed(cordic_dout[15:0])) >>> 1) + s_px;
-            global_y <= (($signed({1'b0, s_dist}) * $signed(cordic_dout[31:16])) >>> 1) + s_py;
-
-            // 2. deriv_theta (Q14)
-            // same >>> 1 as above, to match the units in the Jacobian
-            deriv_theta_x <= -($signed({1'b0, s_dist}) * $signed(cordic_dout[31:16]) >>> 1);
-            deriv_theta_y <=  ($signed({1'b0, s_dist}) * $signed(cordic_dout[15:0]) >>> 1);
+            // global_x, y (Q14), signed throughout
+            global_x <= (($signed({1'b0, s_dist}) * $signed(cordic_dout[15:0])) >>> 1) + $signed(s_px);
+            global_y <= (($signed({1'b0, s_dist}) * $signed(cordic_dout[31:16])) >>> 1) + $signed(s_py);
         end
     end
     always @(posedge clk or negedge rst_n) begin
